@@ -69,12 +69,11 @@ public class UserController {
      * Displays the add user page
      */
     @RequestMapping(value="/addUser-page", method={RequestMethod.GET, RequestMethod.POST})
-    public ModelAndView addUserPage(User user, Model model) {
-        listsOptions(model);
+    public ModelAndView addUserPage(User user) {
         // Adds the user object to the model for user creation
         modelAndView.addObject("user", user);
-        modelAndView.addObject(model);
         modelAndView.setViewName("addUser");
+        listsOptions();
         return modelAndView;
     }
 
@@ -101,13 +100,11 @@ public class UserController {
      * Displays the edit user page
      */
     @RequestMapping(value="/{id}/editUser-page", method={RequestMethod.GET, RequestMethod.POST})
-    public ModelAndView editUserPage(@PathVariable("id") Integer id, Model model) {
-        listsOptions(model);
-
+    public ModelAndView editUserPage(@PathVariable("id") Integer id) {
         // Adds the user object with the matching id to the model for user editing
         modelAndView.addObject("user", users.get(id));
-        modelAndView.addObject(model);
         modelAndView.setViewName("editUser");
+        listsOptions();
         return modelAndView;
     }
 
@@ -149,12 +146,21 @@ public class UserController {
      */
     @RequestMapping(value="/{id}/deleteUser", method={RequestMethod.GET, RequestMethod.POST})
     public String deleteUser(@PathVariable("id") Integer id) throws IOException, SAXException, TransformerException {
+        System.out.println("inside the delete user method");
+
+        // Deletes the user object from the XML file if they aren't promoted
+        if(users.get(id).getPay().toString().isEmpty()) {
+            System.out.print("deleting the user");
+            deleteUserFromXML(users.get(id));
+        } else { // BUG: NOT UPDATING THE USERS PAY IN THE XML FILE
+            System.out.println("promoting the user");
+            editUserInXML(users.get(id));
+        }
+
         // Deletes the user object from the users HashMap
         users.remove(id);
 
-        // Deletes the user object from the XML file
-        deleteUserFromXML(users.get(id));
-
+        System.out.println("getting sent back to the home page");
         return "redirect:/";
     }
 
@@ -162,7 +168,7 @@ public class UserController {
      * Provides the options for the dropdown menus
      * and radiobuttons on the add user page
      */
-    private void listsOptions(Model model) {
+    private void listsOptions() {
         List<String> languagesList = new ArrayList<>();
         languagesList.add("Python");
         languagesList.add("Java");
@@ -172,7 +178,7 @@ public class UserController {
         languagesList.add("PHP");
         languagesList.add("Ruby");
         languagesList.add("Go");
-        model.addAttribute("languagesList", languagesList);
+        modelAndView.addObject("languagesList", languagesList);
 
         List<String> frameworksList = new ArrayList<>();
         frameworksList.add("Django");
@@ -183,18 +189,18 @@ public class UserController {
         frameworksList.add("Laravel");
         frameworksList.add("Ruby on Rails");
         frameworksList.add("Flask");
-        model.addAttribute("frameworksList", frameworksList);
+        modelAndView.addObject("frameworksList", frameworksList);
 
         List<String> teamList = new ArrayList<>();
         teamList.add("Front-end");
         teamList.add("Back-end");
         teamList.add("Full-stack");
-        model.addAttribute("teamList", teamList);
+        modelAndView.addObject("teamList", teamList);
 
         List<String> payList = new ArrayList<>();
         payList.add("Hourly");
         payList.add("Salary");
-        model.addAttribute("payList", payList);
+        modelAndView.addObject("payList", payList);
 
         List<String> yearsOfExperienceList = new ArrayList<>();
         yearsOfExperienceList.add("0-1");
@@ -203,7 +209,7 @@ public class UserController {
         yearsOfExperienceList.add("3-4");
         yearsOfExperienceList.add("4-5");
         yearsOfExperienceList.add("5+");
-        model.addAttribute("yearsOfExperienceList", yearsOfExperienceList);
+        modelAndView.addObject("yearsOfExperienceList", yearsOfExperienceList);
     }
 
     /**
@@ -366,12 +372,13 @@ public class UserController {
 
     /**
      * Writes to the XML file
+     * **NOTE** The format is wonky BUT the program can still read it
      */
     private void writeToXML() throws TransformerException {
         TransformerFactory tf = TransformerFactory.newInstance(); // Creates a new TransformerFactory
         Transformer transformer = tf.newTransformer(); // Allows for the XML file to be written to
         DOMSource domSource = new DOMSource(doc); // Gets the root Node from the XML file
-        StreamResult sr = new StreamResult(new File("users.xml")); // Gets the XML file to write to
+        StreamResult sr = new StreamResult(file); // Gets the XML file to write to
 
         // Formats the XML file
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -429,7 +436,7 @@ public class UserController {
      */
     @RequestMapping(value = "/{id}/promote", method = {RequestMethod.GET, RequestMethod.POST})
     private ModelAndView promote(@PathVariable("id") Integer id, Model model) throws TransformerException {
-        listsOptions(model);
+        listsOptions();
         modelAndView.addObject("user", users.get(id));
         modelAndView.setViewName("promote");
         return modelAndView;

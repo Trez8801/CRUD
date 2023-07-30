@@ -6,7 +6,7 @@
 
 <html>
 	<head>
-		<title>Add User</title>
+		<title>Create</title>
 	</head>
 	<body class="bg-secondary">
 		<br>
@@ -50,10 +50,11 @@
 				<br>
 				<spring:bind path="yearsOfExperience">
 					<div class="form-group">
-						<label class="text-light">Experience:</label>
+						<label class="text-light">Experience:</label><br>
 						<c:forEach var="year" items="${yearsOfExperienceList}">
 							<form:radiobutton cssClass="form-check-input" path="yearsOfExperience" value="${year}"
 							                  id="yearsOfExperience" required="true"/>
+							<label class="text-light">${year}</label><br>
 						</c:forEach>
 						<form:errors path="yearsOfExperience" cssClass="text-danger"/>
 					</div>
@@ -63,7 +64,8 @@
 					<div>
 						<label class="text-light">Programming Languages Known:</label>
 						<form:select cssClass="form-select form-select-lg mb-3 w-25" path="programmingLanguages"
-									 multiple="true" size="${languagesList.size()}" id="languages" required="true"/>
+						             items="${languagesList}" multiple="true" size="${languagesList.size()}"
+						             id="languages" required="true"/>
 						<form:errors path="programmingLanguages" cssClass="text-danger"/>
 					</div>
 				</spring:bind>
@@ -72,7 +74,8 @@
 					<div>
 						<label class="text-light">Frameworks Known:</label>
 						<form:select cssClass="form-select form-select-lg mb-3 w-25" path="frameworks"
-									 multiple="true" size="${frameworksList.size()}" id="frameworks" required="true"/>
+						             items="${frameworksList}" multiple="true" size="${frameworksList.size()}"
+						             id="frameworks" required="true"/>
 						<form:errors path="frameworks" cssClass="text-danger"/>
 					</div>
 				</spring:bind>
@@ -81,7 +84,7 @@
 					<div>
 						<label class="text-light">Team they will be apart of:</label>
 						<form:select cssClass="form-select form-select-lg mb-3 w-25" path="team"
-									 multiple="false" size="1" id="team" required="true"/>
+									 items="${teamList}" multiple="false" size="1" id="team" required="true"/>
 						<form:errors path="team" cssClass="text-danger"/>
 					</div>
 				</spring:bind>
