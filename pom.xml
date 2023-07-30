@@ -15,7 +15,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Crud</name>
-	<description>Create | Read | Update | Delete </description>
+	<description>Create | Read | Update | Delete</description>
 
 	<properties>
 		<java.version>20</java.version>
@@ -40,7 +40,6 @@
 		<dependency>
 			<groupId>jakarta.servlet.jsp.jstl</groupId>
 			<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-			<version>3.0.0</version>
 		</dependency>
 
 		<dependency>

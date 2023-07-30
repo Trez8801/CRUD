@@ -60,7 +60,7 @@ public class UserController {
         }
 
         // Adds the users HashMap to the model for display
-        modelAndView.addObject("users", new ArrayList<>(users.values()));
+        modelAndView.addObject("usersList", new ArrayList<>(users.values()));
         modelAndView.setViewName("home");
         return modelAndView;
     }
@@ -71,7 +71,6 @@ public class UserController {
     @RequestMapping(value="/addUser-page", method={RequestMethod.GET, RequestMethod.POST})
     public ModelAndView addUserPage(User user, Model model) {
         listsOptions(model);
-
         // Adds the user object to the model for user creation
         modelAndView.addObject("user", user);
         modelAndView.addObject(model);
@@ -428,7 +427,7 @@ public class UserController {
     /**
      * A page that promotes the user
      */
-    @RequestMapping(value = "/{id}promote", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/{id}/promote", method = {RequestMethod.GET, RequestMethod.POST})
     private ModelAndView promote(@PathVariable("id") Integer id, Model model) throws TransformerException {
         listsOptions(model);
         modelAndView.addObject("user", users.get(id));

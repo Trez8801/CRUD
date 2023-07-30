@@ -3,6 +3,7 @@ package com.project.Crud.model;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * with the fields id, name, email, bio, etc...
  * to be filled by the user input from the front-end
  */
+
 public class User {
     @NotNull(message = "Id is mandatory")
     private Integer id;
